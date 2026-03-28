@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BluePeak — Sports Technology</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Barlow:ital,wght@0,300;0,400;0,700;0,900;1,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #0d0d0d;
+  --white: #fafaf8;
+  --gray-light: #f3f2ef;
+  --gray-mid: #c8c5bc;
+  --gray-dark: #5a5752;
+  --blue: #0a4bff;
+  --green: #059669;
+  --border: #e0ded8;
+  --font-jp: 'Noto Sans JP', sans-serif;
+  --font-en: 'Barlow', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--white);
+  color: var(--black);
+  font-family: var(--font-jp);
+  font-weight: 300;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: 0.25em;
+  text-transform: uppercase; color: var(--gray-dark);
+  display: block; margin-bottom: 40px;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: rgba(250,250,248,0.96);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 64px;
+}
+.nav-logo {
+  font-family: var(--font-en);
+  font-size: 18px; font-weight: 700; letter-spacing: 0.08em;
+  color: var(--black); text-decoration: none;
+  display: flex; align-items: center; gap: 8px;
+}
+.nav-logo-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue), var(--green));
+}
+.nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+.nav-links a {
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gray-dark); text-decoration: none; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--black); }
+.nav-cta {
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--white); background: var(--black);
+  padding: 10px 20px; text-decoration: none; transition: background 0.2s;
+}
+.nav-cta:hover { background: var(--blue); }
+
+/* ─── HERO ─── */
+#hero {
+  min-height: 100vh; padding-top: 64px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--border);
+}
+.hero-left {
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 80px 48px 60px;
+  border-right: 1px solid var(--border);
+}
+.hero-tag {
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--blue);
+}
+.hero-h1 {
+  font-family: var(--font-en);
+  font-size: clamp(52px, 6.5vw, 90px);
+  font-weight: 900; line-height: 0.9;
+  letter-spacing: -0.02em; text-transform: uppercase;
+}
+.hero-h1 .italic { font-style: italic; color: var(--blue); }
+.hero-sub-wrap { max-width: 400px; }
+.hero-sub {
+  font-size: 15px; font-weight: 300;
+  color: var(--gray-dark); line-height: 1.8; margin-bottom: 32px;
+}
+.hero-cta {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--black); text-decoration: none;
+  border-bottom: 1.5px solid var(--black); padding-bottom: 2px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.hero-cta:hover { color: var(--blue); border-color: var(--blue); }
+.arrow { transition: transform 0.2s; }
+.hero-cta:hover .arrow { transform: translateX(4px); }
+
+.hero-right {
+  position: relative; overflow: hidden;
+  background: var(--black); min-height: 600px;
+}
+#hero-canvas { width: 100%; height: 100%; display: block; }
+.hero-right-label {
+  position: absolute; top: 32px; left: 32px;
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+}
+.hero-right-data {
+  position: absolute; bottom: 32px; left: 32px; right: 32px;
+  display: flex; gap: 24px;
+}
+.hero-datum {
+  flex: 1; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 12px;
+}
+.hero-datum .v {
+  font-family: var(--font-en); font-size: 26px; font-weight: 700;
+  color: #fff; line-height: 1; margin-bottom: 4px;
+}
+.hero-datum .l {
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: rgba(255,255,255,0.38);
+}
+
+/* ─── ABOUT ─── */
+#about {
+  display: grid; grid-template-columns: 280px 1fr;
+  border-bottom: 1px solid var(--border);
+}
+.about-label-col {
+  padding: 80px 48px; border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.about-label-col .vert {
+  font-family: var(--font-en); font-size: 11px;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--gray-mid); writing-mode: vertical-rl;
+}
+.about-content { padding: 80px 60px; }
+.about-h2 {
+  font-family: var(--font-en);
+  font-size: clamp(34px, 4vw, 54px);
+  font-weight: 900; line-height: 1;
+  text-transform: uppercase; letter-spacing: -0.01em; margin-bottom: 48px;
+}
+.about-h2 em { font-style: italic; color: var(--blue); }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+.about-grid p {
+  font-size: 15px; font-weight: 300;
+  color: var(--gray-dark); line-height: 1.85; margin-bottom: 20px;
+}
+
+/* ─── PROJECTS ─── */
+#projects { border-bottom: 1px solid var(--border); }
+.projects-head {
+  padding: 80px 48px 40px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: baseline; justify-content: space-between;
+}
+.projects-head h2 {
+  font-family: var(--font-en);
+  font-size: clamp(30px, 4vw, 50px);
+  font-weight: 900; text-transform: uppercase; letter-spacing: -0.01em;
+}
+.projects-count {
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--gray-mid); letter-spacing: 0.1em;
+}
+
+/* プロジェクトリスト — KOELのWORKSスタイル */
+.project-list { display: flex; flex-direction: column; }
+
+.project-row {
+  display: grid;
+  grid-template-columns: 72px 1fr 260px 200px;
+  align-items: start;
+  padding: 40px 48px;
+  border-bottom: 1px solid var(--border);
+  gap: 40px;
+  text-decoration: none; color: inherit;
+  transition: background 0.22s;
+  position: relative;
+}
+.project-row:last-child { border-bottom: none; }
+.project-row:hover { background: var(--gray-light); }
+.project-row::after {
+  content: '→';
+  font-family: var(--font-mono); font-size: 14px;
+  color: var(--gray-mid);
+  position: absolute; right: 48px; top: 50%; transform: translateY(-50%);
+  transition: color 0.2s, transform 0.2s;
+}
+.project-row:hover::after { color: var(--blue); transform: translateY(-50%) translateX(4px); }
+
+/* LIVE プロジェクトは特別スタイル */
+.project-row.live { cursor: pointer; }
+
+.proj-num {
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 0.2em; color: var(--gray-mid);
+  padding-top: 4px;
+}
+.proj-main {}
+.proj-status {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.proj-status.live-badge { color: var(--blue); }
+.proj-status.live-badge::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--blue); animation: blink 1.5s infinite;
+}
+.proj-status.wip-badge { color: var(--gray-dark); }
+.proj-status.wip-badge::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gray-mid);
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.proj-title {
+  font-family: var(--font-en);
+  font-size: 24px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.01em; line-height: 1.1; margin-bottom: 10px;
+}
+.proj-desc {
+  font-size: 13px; font-weight: 300;
+  color: var(--gray-dark); line-height: 1.8; max-width: 520px;
+}
+.proj-tags {
+  padding-top: 4px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.proj-tag {
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gray-dark);
+  border: 1px solid var(--border); padding: 4px 8px;
+  display: inline-block; width: fit-content;
+}
+.proj-tag.blue { border-color: rgba(10,75,255,0.3); color: var(--blue); }
+.proj-meta {
+  padding-top: 4px; display: flex; flex-direction: column; gap: 8px;
+}
+.proj-year {
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 0.15em; color: var(--gray-mid);
+}
+.proj-link {
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--blue); text-decoration: none;
+  border-bottom: 1px solid rgba(10,75,255,0.3);
+  padding-bottom: 1px; width: fit-content;
+  transition: opacity 0.2s;
+}
+.proj-link:hover { opacity: 0.7; }
+
+/* highlight section removed */
+
+/* ─── VISION ─── */
+#vision {
+  border-bottom: 1px solid var(--border);
+  display: grid; grid-template-columns: 280px 1fr;
+}
+.vision-label {
+  padding: 80px 48px; border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; justify-content: space-between;
+  background: var(--black);
+}
+.vision-label .lbl {
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(255,255,255,0.35); margin-bottom: 32px;
+}
+.vision-label h2 {
+  font-family: var(--font-en);
+  font-size: 34px; font-weight: 900;
+  text-transform: uppercase; letter-spacing: -0.01em;
+  color: #fff; line-height: 1;
+}
+.vision-label h2 em { font-style: italic; color: var(--blue); }
+.vision-grid { display: grid; grid-template-columns: 1fr 1fr; }
+.vision-card {
+  padding: 52px 48px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.vision-card:nth-child(2n) { border-right: none; }
+.vision-card:nth-child(n+3) { border-bottom: none; }
+.vision-num {
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 0.2em; color: var(--gray-mid);
+  margin-bottom: 24px; display: block;
+}
+.vision-title {
+  font-family: var(--font-en);
+  font-size: 22px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.01em; margin-bottom: 14px;
+  line-height: 1.15;
+}
+.vision-title.blue { color: var(--blue); }
+.vision-body {
+  font-size: 13px; font-weight: 300;
+  color: var(--gray-dark); line-height: 1.85;
+}
+
+/* ─── CTA ─── */
+#cta {
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--border); min-height: 360px;
+}
+.cta-left {
+  background: var(--black); padding: 80px 60px;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.cta-left h2 {
+  font-family: var(--font-en);
+  font-size: clamp(38px, 5vw, 68px);
+  font-weight: 900; text-transform: uppercase;
+  letter-spacing: -0.02em; line-height: 0.9; color: #fff;
+}
+.cta-left h2 em { font-style: italic; color: var(--blue); }
+.cta-actions { display: flex; gap: 16px; }
+.cta-btn {
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 14px 28px; text-decoration: none; transition: 0.2s;
+}
+.cta-btn.primary { color: var(--black); background: #fff; }
+.cta-btn.primary:hover { background: var(--blue); color: #fff; }
+.cta-btn.ghost { color: rgba(255,255,255,0.45); border: 1px solid rgba(255,255,255,0.18); }
+.cta-btn.ghost:hover { border-color: #fff; color: #fff; }
+
+.cta-right {
+  padding: 80px 60px; border-left: 1px solid var(--border);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.cta-right h3 {
+  font-family: var(--font-en); font-size: 22px; font-weight: 700;
+  text-transform: uppercase; margin-bottom: 16px;
+}
+.cta-right p {
+  font-size: 14px; font-weight: 300;
+  color: var(--gray-dark); line-height: 1.8; margin-bottom: 28px;
+}
+.contact-form { display: flex; }
+.contact-input {
+  flex: 1; padding: 12px 16px;
+  border: 1px solid var(--border); border-right: none;
+  font-family: var(--font-jp); font-size: 14px;
+  background: var(--white); outline: none; transition: border-color 0.2s;
+}
+.contact-input:focus { border-color: var(--blue); }
+.contact-submit {
+  padding: 12px 20px; background: var(--black); color: #fff;
+  border: 1px solid var(--black);
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  cursor: pointer; transition: background 0.2s;
+}
+.contact-submit:hover { background: var(--blue); border-color: var(--blue); }
+
+/* ─── FOOTER ─── */
+footer { background: var(--white); }
+.footer-main {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  border-bottom: 1px solid var(--border);
+}
+.footer-col {
+  padding: 52px 48px; border-right: 1px solid var(--border);
+}
+.footer-col:last-child { border-right: none; }
+.footer-logo {
+  font-family: var(--font-en); font-size: 18px; font-weight: 700;
+  letter-spacing: 0.06em; color: var(--black); text-decoration: none;
+  display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
+}
+.footer-tagline {
+  font-size: 13px; font-weight: 300;
+  color: var(--gray-dark); line-height: 1.75; max-width: 240px;
+}
+.footer-col-title {
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gray-mid); margin-bottom: 20px; display: block;
+}
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-links a {
+  font-size: 13px; color: var(--gray-dark);
+  text-decoration: none; transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--black); }
+.footer-bottom {
+  padding: 24px 48px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-copy {
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 0.08em; color: var(--gray-mid);
+}
+
+/* ─── REVEAL ─── */
+.reveal {
+  opacity: 0; transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <span class="nav-logo-dot"></span>BLUEPEAK
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">ABOUT</a></li>
+    <li><a href="#projects">PROJECTS</a></li>
+    <li><a href="#vision">VISION</a></li>
+  </ul>
+  <a class="nav-cta" href="#cta">CONTACT</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <span class="hero-tag">Sports Technology</span>
+    <h1 class="hero-h1">
+      SPORTS,<br>
+      <span class="italic">REIMAGINED</span><br>
+      BY TECH.
+    </h1>
+    <div class="hero-sub-wrap">
+      <p class="hero-sub">
+        BluePeakは、スポーツの現場が抱える「面倒」に、テクノロジーで向き合うチームです。大会運営、チーム管理、競技体験——スポーツにかかわるすべてのプロセスを、もっとシンプルにしていきます。
+      </p>
+      <a class="hero-cta" href="#projects">
+        プロジェクトを見る <span class="arrow">→</span>
+      </a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-right-label">BLUEPEAK / SPORTS TECH PLATFORM</div>
+    <div class="hero-right-data">
+      <div class="hero-datum">
+        <div class="v">Sports</div>
+        <div class="l">Tech Company</div>
+      </div>
+      <div class="hero-datum">
+        <div class="v" style="color:#60a5fa">Japan</div>
+        <div class="l">Based & Global</div>
+      </div>
+      <div class="hero-datum">
+        <div class="v">Built</div>
+        <div class="l">For the Field</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-label-col">
+    <span class="section-label">ABOUT</span>
+    <span class="vert">BLUEPEAK SPORTS TECHNOLOGY</span>
+  </div>
+  <div class="about-content reveal">
+    <h2 class="about-h2">TECHNOLOGY<br><em>CHANGES SPORT.</em></h2>
+    <div class="about-grid">
+      <div>
+        <p>スポーツには、まだテクノロジーが届いていない場所があります。練習の記録、大会の運営、チームの連絡、施設の予約——現場では今も、アナログな作業が当たり前のように続いています。</p>
+        <p>BluePeakは、スポーツとテクノロジーの間にある「当たり前の不便」に目を向けます。大きな革命より、現場の一人ひとりが「これがあってよかった」と思えるプロダクトを、着実につくっていきます。</p>
+      </div>
+      <div>
+        <p>競技のジャンルも、規模も、問いません。プロチームも、学校の部活も、地域の草の根大会も——スポーツに関わるすべての現場が、テクノロジーによって少し楽になる世界を目指しています。</p>
+        <p>スポーツを愛し、テクノロジーを武器に、現場を変えていく。それがBluePeakのやり方です。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="projects-head">
+    <h2>PROJECTS</h2>
+    <span class="projects-count">1 PROJECT</span>
+  </div>
+
+  <div class="project-list">
+
+    <!-- Project 01: Tournament App LIVE -->
+    <a class="project-row live reveal" href="https://tournament-frontend-lemon.vercel.app/" target="_blank">
+      <div class="proj-num">01</div>
+      <div class="proj-main">
+        <div class="proj-status live-badge">Live</div>
+        <div class="proj-title">Tournament App</div>
+        <p class="proj-desc">
+          大会運営をゼロから設計したクラウドプラットフォームです。トーナメント・リーグ戦の組み合わせ自動生成、スコアのリアルタイム集計、チャット、スケジュール管理まで——スプレッドシートとメールの往復を、まるごと置き換えます。ホスト・キャプテン・ゲストの3ロール設計で、全員が迷わず動ける導線を実現しています。
+        </p>
+      </div>
+      <div class="proj-tags">
+        <span class="proj-tag blue">Web App</span>
+        <span class="proj-tag">大会運営</span>
+        <span class="proj-tag">リアルタイム同期</span>
+        <span class="proj-tag">ロールベース設計</span>
+      </div>
+      <div class="proj-meta">
+        <span class="proj-year">2024 —</span>
+        <a class="proj-link" href="https://tournament-frontend-lemon.vercel.app/" target="_blank" onclick="event.stopPropagation()">アプリを開く ↗</a>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- VISION -->
+<section id="vision">
+  <div class="vision-label">
+    <div>
+      <span class="lbl">OUR VISION</span>
+      <h2>WHY WE<br><em>BUILD</em><br>THIS.</h2>
+    </div>
+  </div>
+  <div class="vision-grid">
+    <div class="vision-card reveal">
+      <span class="vision-num">01</span>
+      <div class="vision-title blue">スポーツの現場から、始める</div>
+      <p class="vision-body">華やかなビジョンより先に、現場の一つの課題を解きます。グラウンドで使われ、大会で動き、チームに馴染むプロダクトをつくることが、BluePeakのスタート地点です。</p>
+    </div>
+    <div class="vision-card reveal">
+      <span class="vision-num">02</span>
+      <div class="vision-title">スポーツを、もっと広く</div>
+      <p class="vision-body">テクノロジーが現場の手間を引き受けることで、大会を開ける人が増え、チームを持てる人が増え、スポーツに関わる人の総量が増えます。それがBluePeakの考える「スポーツテック」の役割です。</p>
+    </div>
+    <div class="vision-card reveal">
+      <span class="vision-num">03</span>
+      <div class="vision-title">使われてこそ、テクノロジー</div>
+      <p class="vision-body">難しいシステムは現場に定着しません。どれだけ優れた設計でも、使われなければ意味がありません。BluePeakは、誰でも迷わず使えることを、機能と同じレベルで大切にしています。</p>
+    </div>
+    <div class="vision-card reveal">
+      <span class="vision-num">04</span>
+      <div class="vision-title">プロダクトで、問いに答える</div>
+      <p class="vision-body">「なぜスポーツの現場にこれがないのか」という問いがある限り、つくり続けます。議論より先に動くものを届ける——それがBluePeakの姿勢です。</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-left">
+    <h2>LET'S BUILD<br><em>TOGETHER.</em></h2>
+    <div class="cta-actions">
+      <a class="cta-btn primary" href="#cta">お問い合わせ</a>
+      <a class="cta-btn ghost" href="#projects">プロジェクトを見る</a>
+    </div>
+  </div>
+  <div class="cta-right">
+    <span class="section-label">CONTACT</span>
+    <h3>お問い合わせ</h3>
+    <p>プロダクトへのご意見・ご感想、パートナーシップのご提案など、お気軽にご連絡ください。フォームからメッセージをお送りいただくと、BluePeakのメンバーに直接届きます。</p>
+    <form
+      id="contact-form"
+      action="https://formspree.io/f/mwvwlkyr"
+      method="POST"
+      style="display:flex; flex-direction:column; gap:10px;"
+    >
+      <div style="display:flex;">
+        <input
+          class="contact-input"
+          type="email"
+          name="email"
+          placeholder="メールアドレス"
+          required
+        >
+      </div>
+      <div style="display:flex;">
+        <textarea
+          class="contact-input"
+          name="message"
+          placeholder="メッセージ（任意）"
+          rows="3"
+          style="resize:vertical; border-right: 1px solid var(--border); font-family:var(--font-jp); font-size:14px; padding:12px 16px; width:100%; outline:none; background:var(--white); transition:border-color 0.2s; border:1px solid var(--border);"
+        ></textarea>
+      </div>
+      <div style="display:flex;">
+        <button class="contact-submit" type="submit" id="submit-btn" style="width:100%;">SEND MESSAGE</button>
+      </div>
+      <p id="form-status" style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;color:var(--gray-dark);display:none;"></p>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-main">
+    <div class="footer-col">
+      <a class="footer-logo" href="#">
+        <span class="nav-logo-dot"></span>BLUEPEAK
+      </a>
+      <p class="footer-tagline">スポーツの現場にある「当たり前の不便」に、テクノロジーで向き合うチームです。</p>
+    </div>
+    <div class="footer-col">
+      <span class="footer-col-title">Projects</span>
+      <ul class="footer-links">
+        <li><a href="https://tournament-frontend-lemon.vercel.app/" target="_blank">Tournament App ↗</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <span class="footer-col-title">About</span>
+      <ul class="footer-links">
+        <li><a href="#about">BluePeakについて</a></li>
+        <li><a href="#vision">ビジョン</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <span class="footer-col-title">Contact</span>
+      <ul class="footer-links">
+        <li><a href="#cta">お問い合わせ</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 BluePeak. All Rights Reserved.</span>
+  </div>
+</footer>
+
+<script>
+/* ═══ HERO CANVAS ═══ */
+const hc = document.getElementById('hero-canvas');
+const hctx = hc.getContext('2d');
+let HW, HH;
+function rzH(){ HW = hc.width = hc.offsetWidth; HH = hc.height = hc.offsetHeight; }
+rzH(); window.addEventListener('resize', rzH);
+
+const hp = Array.from({length:18},(_,i)=>({
+  x:Math.random()*800, y:Math.random()*600,
+  vx:(Math.random()-.5)*1.1, vy:(Math.random()-.5)*1.1,
+  team:i<9?0:1, trail:[], pulse:Math.random()*Math.PI*2, spd:.7+Math.random()*.7
+}));
+const hb = {x:400,y:300,vx:2,vy:1.1,trail:[]};
+
+function wrap(o,w,h){if(o.x<0)o.x=w;if(o.x>w)o.x=0;if(o.y<0)o.y=h;if(o.y>h)o.y=0;}
+
+function heroLoop(){
+  hctx.fillStyle='#060c16'; hctx.fillRect(0,0,HW,HH);
+  hctx.strokeStyle='rgba(20,60,160,0.05)'; hctx.lineWidth=.5;
+  for(let x=0;x<HW;x+=48){hctx.beginPath();hctx.moveTo(x,0);hctx.lineTo(x,HH);hctx.stroke();}
+  for(let y=0;y<HH;y+=48){hctx.beginPath();hctx.moveTo(0,y);hctx.lineTo(HW,y);hctx.stroke();}
+  hctx.strokeStyle='rgba(0,180,255,0.07)'; hctx.lineWidth=1;
+  hctx.strokeRect(HW*.05,HH*.08,HW*.9,HH*.84);
+  hctx.beginPath();hctx.moveTo(HW/2,HH*.08);hctx.lineTo(HW/2,HH*.92);hctx.stroke();
+  hctx.beginPath();hctx.arc(HW/2,HH/2,HH*.2,0,Math.PI*2);hctx.stroke();
+
+  hb.vx+=(Math.random()-.5)*.12; hb.vy+=(Math.random()-.5)*.12;
+  const bs=Math.hypot(hb.vx,hb.vy); if(bs>2.6){hb.vx*=2.4/bs;hb.vy*=2.4/bs;}
+  hb.x+=hb.vx; hb.y+=hb.vy; wrap(hb,HW,HH);
+  hb.trail.push({x:hb.x,y:hb.y}); if(hb.trail.length>22)hb.trail.shift();
+  for(let i=0;i<hb.trail.length-1;i++){
+    const t=i/hb.trail.length;
+    hctx.strokeStyle=`rgba(0,220,110,${t*.5})`; hctx.lineWidth=t*2.2;
+    hctx.beginPath();hctx.moveTo(hb.trail[i].x,hb.trail[i].y);hctx.lineTo(hb.trail[i+1].x,hb.trail[i+1].y);hctx.stroke();
+  }
+  const bg=hctx.createRadialGradient(hb.x,hb.y,0,hb.x,hb.y,14);
+  bg.addColorStop(0,'rgba(0,220,110,.9)');bg.addColorStop(1,'rgba(0,220,110,0)');
+  hctx.fillStyle=bg;hctx.beginPath();hctx.arc(hb.x,hb.y,14,0,Math.PI*2);hctx.fill();
+  hctx.fillStyle='#fff';hctx.beginPath();hctx.arc(hb.x,hb.y,3.5,0,Math.PI*2);hctx.fill();
+
+  hp.forEach(p=>{
+    p.pulse+=.055;
+    p.vx+=(Math.random()-.5)*.12; p.vy+=(Math.random()-.5)*.12;
+    const ps=Math.hypot(p.vx,p.vy); if(ps>p.spd){p.vx*=p.spd/ps;p.vy*=p.spd/ps;}
+    p.x+=p.vx; p.y+=p.vy; wrap(p,HW,HH);
+    p.trail.push({x:p.x,y:p.y}); if(p.trail.length>12)p.trail.shift();
+    const c=p.team===0?'0,160,255':'0,90,180';
+    for(let i=0;i<p.trail.length-1;i++){
+      const t=i/p.trail.length;
+      hctx.strokeStyle=`rgba(${c},${t*.22})`; hctx.lineWidth=t*1.3;
+      hctx.beginPath();hctx.moveTo(p.trail[i].x,p.trail[i].y);hctx.lineTo(p.trail[i+1].x,p.trail[i+1].y);hctx.stroke();
+    }
+    hp.filter(q=>q.team===p.team&&q!==p).forEach(q=>{
+      const d=Math.hypot(p.x-q.x,p.y-q.y);
+      if(d<HW*.16){hctx.strokeStyle=`rgba(${c},${.07*(1-d/(HW*.16))})`;hctx.lineWidth=.5;hctx.beginPath();hctx.moveTo(p.x,p.y);hctx.lineTo(q.x,q.y);hctx.stroke();}
+    });
+    const pl=.5+.5*Math.sin(p.pulse);
+    hctx.strokeStyle=`rgba(${c},${.18+pl*.12})`; hctx.lineWidth=1;
+    hctx.beginPath();hctx.arc(p.x,p.y,8+pl*5,0,Math.PI*2);hctx.stroke();
+    hctx.fillStyle=p.team===0?'rgba(0,160,255,.85)':'rgba(0,90,180,.85)';
+    hctx.beginPath();hctx.arc(p.x,p.y,4.5,0,Math.PI*2);hctx.fill();
+    hctx.fillStyle='#fff';hctx.beginPath();hctx.arc(p.x,p.y,1.8,0,Math.PI*2);hctx.fill();
+  });
+  requestAnimationFrame(heroLoop);
+}
+heroLoop();
+
+/* sport canvas removed */
+
+/* ═══ Scroll reveal ═══ */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* ═══ Contact form (Formspree) ═══ */
+const form = document.getElementById('contact-form');
+const status = document.getElementById('form-status');
+const submitBtn = document.getElementById('submit-btn');
+if (form) {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.textContent = 'SENDING...';
+    submitBtn.disabled = true;
+    const data = new FormData(form);
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        status.textContent = '✓ メッセージを送信しました。ありがとうございます。';
+        status.style.color = 'var(--green)';
+        status.style.display = 'block';
+        form.reset();
+        submitBtn.textContent = 'SENT';
+      } else {
+        throw new Error();
+      }
+    } catch {
+      status.textContent = '送信に失敗しました。時間をおいて再度お試しください。';
+      status.style.color = '#e53e3e';
+      status.style.display = 'block';
+      submitBtn.textContent = 'SEND MESSAGE';
+      submitBtn.disabled = false;
+    }
+  });
+}
+</script>
+</body>
+</html>
